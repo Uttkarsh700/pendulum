@@ -1,5 +1,4 @@
-ARG BASE_IMAGE
-FROM ${BASE_IMAGE}
+FROM public.ecr.aws/d3j8x8q7/olympus-base-python:latest
 
 WORKDIR /app
 
@@ -9,7 +8,7 @@ COPY pyproject.toml poetry.lock ./
 # Install project dependencies using Poetry (assumes Poetry exists in base image).
 # Do NOT install Poetry manually.
 RUN poetry config virtualenvs.in-project false \
- && poetry install --only main --only test --only build --no-root -v
+    && poetry install --no-root -v
 
 # Copy the full repository into the image
 COPY . .
