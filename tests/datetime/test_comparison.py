@@ -416,4 +416,11 @@ def test_less_than_with_fold():
     )
 
     assert d1.timestamp() > d2.timestamp()
+
+    # Verify rich ordering operators behave consistently when fold differs but
+    # the absolute instant (timestamp) shows d1 is later than d2.
     assert not (d1 < d2)
+    assert d1 > d2
+    assert d2 < d1
+    assert d1 >= d2
+    assert not (d1 <= d2)
