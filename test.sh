@@ -1,25 +1,24 @@
 #!/bin/sh
-# POSIX shell script for Olympus test runner.
-# Usage:
-#   ./test.sh base
-#   ./test.sh new
-# This script runs only the regression test and does not install packages.
 set -eu
 
 if [ "$#" -ne 1 ]; then
-  printf 'Usage: %s [base|new]\n' "$0" >&2
-  exit 2
+    echo "Usage: $0 {base|new}"
+    exit 1
 fi
 
 case "$1" in
-  base|new)
+base)
+    # Run the comparison file but exclude the new regression test that
+    # doesn't exist in the base commit.
+    poetry run pytest -q tests/datetime/test_comparison.py -k "not less_than_with_fold"
     ;;
-  *)
-    printf 'Invalid argument: %s\n' "$1" >&2
-    printf 'Usage: %s [base|new]\n' "$0" >&2
-    exit 2
+new)
+    # Run the full file including the new regression test.
+    poetry run pytest -q tests/datetime/test_comparison.py
+    ;;
+*)
+    echo "Usage: $0 {base|new}"
+    exit 1
     ;;
 esac
 
-poetry run pytest -q tests/datetime/test_comparison.py::test_less_than_with_fold
-exit $?
