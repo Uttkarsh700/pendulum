@@ -392,3 +392,28 @@ def test_comparison_to_unsupported():
 
     assert dt1 != "test"
     assert dt1 not in ["test"]
+
+
+def test_less_than_with_fold():
+    d1 = pendulum.datetime(
+        2023,
+        11,
+        5,
+        1,
+        15,
+        tz="America/Los_Angeles",
+        fold=1,
+    )
+
+    d2 = pendulum.datetime(
+        2023,
+        11,
+        5,
+        1,
+        25,
+        tz="America/Los_Angeles",
+        fold=0,
+    )
+
+    assert d1.timestamp() > d2.timestamp()
+    assert not (d1 < d2)

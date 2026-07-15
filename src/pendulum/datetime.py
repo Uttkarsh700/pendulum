@@ -554,6 +554,48 @@ class DateTime(datetime.datetime, Date):
 
         return (self.month, self.day) == (instance.month, instance.day)
 
+    # Rich ordering operations
+    def __lt__(self, other: datetime.datetime) -> bool:  # type: ignore[override]
+        if not isinstance(other, datetime.datetime):
+            return NotImplemented
+
+        # Normalize both operands to UTC stdlib datetimes using base implementation
+        self_utc = datetime.datetime.astimezone(self, UTC)
+        other_dt = other if isinstance(other, DateTime) else DateTime.instance(other)
+        other_utc = datetime.datetime.astimezone(other_dt, UTC)
+
+        return datetime.datetime.__lt__(self_utc, other_utc)
+
+    def __le__(self, other: datetime.datetime) -> bool:  # type: ignore[override]
+        if not isinstance(other, datetime.datetime):
+            return NotImplemented
+
+        self_utc = datetime.datetime.astimezone(self, UTC)
+        other_dt = other if isinstance(other, DateTime) else DateTime.instance(other)
+        other_utc = datetime.datetime.astimezone(other_dt, UTC)
+
+        return datetime.datetime.__le__(self_utc, other_utc)
+
+    def __gt__(self, other: datetime.datetime) -> bool:  # type: ignore[override]
+        if not isinstance(other, datetime.datetime):
+            return NotImplemented
+
+        self_utc = datetime.datetime.astimezone(self, UTC)
+        other_dt = other if isinstance(other, DateTime) else DateTime.instance(other)
+        other_utc = datetime.datetime.astimezone(other_dt, UTC)
+
+        return datetime.datetime.__gt__(self_utc, other_utc)
+
+    def __ge__(self, other: datetime.datetime) -> bool:  # type: ignore[override]
+        if not isinstance(other, datetime.datetime):
+            return NotImplemented
+
+        self_utc = datetime.datetime.astimezone(self, UTC)
+        other_dt = other if isinstance(other, DateTime) else DateTime.instance(other)
+        other_utc = datetime.datetime.astimezone(other_dt, UTC)
+
+        return datetime.datetime.__ge__(self_utc, other_utc)
+
     # ADDITIONS AND SUBSTRACTIONS
 
     def add(
